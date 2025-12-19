@@ -75,10 +75,10 @@
               class="dashboard-search-input"
             />
           </form>
-          <button class="dashboard-export" onclick="exportSelectedStudents()">
+          <!-- <button class="dashboard-export" onclick="exportSelectedStudents()">
             <i class="lni lni-download"></i>
             EXPORT
-          </button>
+          </button> -->
         </div>
       </nav>
 
@@ -100,9 +100,9 @@
         <div class="level-section">
           <div class="level-header">
             <span class="level-tag">{{ level }}L</span>
-            <button onclick="toggleAll('{{ level }}')" class="select-all-btn">
+            <!-- <button onclick="toggleAll('{{ level }}')" class="select-all-btn">
               SELECT ALL
-            </button>
+            </button> -->
           </div>
 
           {% with level_students=students_by_level|get_item:level %}
@@ -134,13 +134,13 @@
                         <p>Department: {{ student.department }}</p>
                       </div>
                     </a>
-                    <div class="student-select">
+                    <!-- <div class="student-select">
                       <input
                         type="checkbox"
                         class="student-checkbox level-{{ level }}"
                         value="{{ student.id }}"
                       />
-                    </div>
+                    </div> -->
                   </div>
                 {% endfor %}
               </div>

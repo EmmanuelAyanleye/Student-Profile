@@ -274,7 +274,7 @@ body::before {
   }
 
   .network-image {
-    display: none; 
+    display: none;
   }
 
   .row {
@@ -345,7 +345,6 @@ body::before {
   }
 }
 
-
 /* LOGIN PAGE STYLING */
 
 .content-wrapper-login {
@@ -413,7 +412,7 @@ body::before {
 
 .network-image {
   display: none;
-  margin-top: 2rem; 
+  margin-top: 2rem;
 }
 
 @media (min-width: 992px) {
@@ -421,7 +420,7 @@ body::before {
     display: block;
     max-height: 550px;
     width: 550px;
-    margin-left: auto; 
+    margin-left: auto;
   }
 
   .network-image img {
@@ -456,7 +455,6 @@ body::before {
     transform: translateX(0);
   }
 }
-
 
 @media (max-width: 768px) {
   .login-container {
@@ -500,7 +498,7 @@ body::before {
   transform: translate(-50%, -50%);
   width: 500px;
   height: 500px;
-  background-image: url("../images/Espam logo.png"); 
+  background-image: url("../images/Espam logo.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -609,7 +607,7 @@ body::before {
   position: relative;
   margin: 0;
   padding-top: 5px;
-  margin-bottom: 0.5rem; 
+  margin-bottom: 0.5rem;
 }
 
 .level-tag {
@@ -869,9 +867,9 @@ close-menu:hover {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  margin-top: 0.5rem; 
+  margin-top: 0.5rem;
   padding: 0 2rem;
-  padding-bottom: 80px; 
+  padding-bottom: 80px;
 }
 
 .student-list-wrapper {
@@ -1202,8 +1200,8 @@ close-menu:hover {
 .level-section {
   position: relative;
   margin: 0;
-  padding-top: 15px; 
-  margin-bottom: 1rem; 
+  padding-top: 15px;
+  margin-bottom: 1rem;
 }
 
 .level-header {
@@ -1220,7 +1218,7 @@ close-menu:hover {
 }
 
 .student-list-wrapper {
-  margin-top: 140px; 
+  margin-top: 140px;
   padding: 0 2rem;
 }
 
@@ -1538,7 +1536,7 @@ close-menu:hover {
   border-radius: 15px;
   border: 2px solid #2a1b6d;
   overflow: hidden;
-  height: 100%; 
+  height: 100%;
 }
 
 .student-photo img {
@@ -1639,12 +1637,12 @@ close-menu:hover {
     flex-direction: column;
   }
 
-  .dashboard-title{
+  .dashboard-title {
     font-size: 1.2rem;
   }
 
   .student-photo {
-    height: 350px; 
+    height: 350px;
   }
 
   .student-actions {
@@ -1800,7 +1798,7 @@ close-menu:hover {
     padding: 0 1rem;
   }
 
-  .upload-form .row{
+  .upload-form .row {
     flex-direction: column !important;
   }
 
@@ -2009,7 +2007,6 @@ select.form-control {
   }
 }
 
-
 @media screen and (max-width: 768px) {
   .dashboard-container {
     display: flex;
@@ -2065,4 +2062,47 @@ select.form-control {
   .dept-header-wrapper {
     padding: 0.5rem;
   }
+}
+
+/* Styles for achievement and image label inputs */
+.achievement-file-input,
+.student-image-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.achievement-file-input:hover,
+.student-image-input:hover {
+  border-color: #2a1b6d;
+}
+
+.upload-label {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+/* Hide file inputs but keep them functional */
+.achievement-upload-box input[type="file"],
+.image-upload-box input[type="file"] {
+  display: none;
+}
+
+/* Upload box styling */
+.achievement-upload-box:hover,
+.image-upload-box:hover {
+  border-color: #ff6b6b;
+  background-color: #f0f0f0;
+}
+
+.image-upload-box:hover {
+  background-color: #f9f9f9;
 }

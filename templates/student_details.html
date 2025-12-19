@@ -4,31 +4,185 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Espam Formation University</title>
-    <link rel="icon" href="{% static 'images/Espam logo.png' %}" type="image/png">
+    <title>Student Details - Espam Formation University</title>
+    <link
+      rel="icon"
+      href="{% static 'images/Espam logo.png' %}"
+      type="image/png"
+    />
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    />
-
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    ></script>
-
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <script defer src="{% static 'js/script.js' %}"></script>
+    <style>
+      .student-details-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .form-field label {
+        margin-bottom: 0.25rem !important;
+        margin-top: 0.25rem !important;
+        margin-right: 0.5rem !important;
+      }
+
+      .form-field > div {
+        font-size: 1rem;
+        color: #333;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .achievement-item {
+        padding: 1.5rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        background-color: #f9f9f9;
+        transition: all 0.3s ease;
+      }
+
+      .achievement-item:hover {
+        border-color: #2a1b6d;
+        box-shadow: 0 4px 12px rgba(42, 27, 109, 0.1);
+      }
+
+      .achievement-item label {
+        margin-bottom: 1rem !important;
+        font-weight: 600;
+        color: #2a1b6d;
+        display: block;
+      }
+
+      .achievement-item a {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #2a1b6d;
+        text-decoration: none;
+        word-break: break-word;
+        transition: color 0.3s;
+      }
+
+      .achievement-item a:hover {
+        color: #1a0f5b;
+      }
+
+      .image-item {
+        padding: 1.5rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        background-color: #f9f9f9;
+        transition: all 0.3s ease;
+      }
+
+      .image-item:hover {
+        border-color: #2a1b6d;
+        box-shadow: 0 4px 12px rgba(42, 27, 109, 0.1);
+      }
+
+      .image-item label {
+        margin-bottom: 1rem !important;
+        font-weight: 600;
+        color: #2a1b6d;
+        display: block;
+      }
+
+      .image-display {
+        height: 220px;
+        border: 2px solid #2a1b6d;
+        border-radius: 12px;
+        overflow: hidden;
+        background-color: #f9f9f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .image-display img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .achievements-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .images-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .form-section {
+        margin-bottom: 3rem;
+      }
+
+      .page-title {
+        margin-bottom: 2rem;
+      }
+
+      .page-title h3 {
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 1.3rem;
+      }
+
+      @media (max-width: 768px) {
+        .student-details-container {
+          padding: 1rem;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+
+        .achievements-grid {
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
+
+        .images-grid {
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
+
+        .page-title h3 {
+          font-size: 1.2rem;
+        }
+
+        .form-field{
+          
+        min-width: 470px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .achievements-grid,
+        .images-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .form-field {
+          margin-bottom: 1.5rem;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="dashboard-main">
       <nav class="dashboard-nav">
         <div class="dashboard-container">
-          <button class="back-btn" onclick="window.location.href='{% url 'view_students' %}'">
+          <button
+            class="back-btn"
+            onclick="window.location.href='{% url 'view_students' %}'"
+          >
             <i class="lni lni-arrow-left"></i>
           </button>
           <h1 class="dashboard-title">ESPAM FORMATION UNIVERSITY</h1>
@@ -40,149 +194,482 @@
         </div>
       </nav>
 
-      <main class="student-details-container">
+      <main class="upload-container">
         <div class="page-title">
-          <h3>Student Details</h3>
-          {% csrf_token %}
+          <h3>
+            Student Profile - {{ student.surname }} {{ student.other_names }}
+          </h3>
         </div>
-        <div class="student-details-content">
-          <div class="photo-upload-section">
-            <div class="photo-container">
-              {% if student.photo %}
-              <img
-                src="{{ student.photo.url }}"
-                alt="{{ student.surname }}'s photo"
-                width="100"
-                class="student-image h-100"
-              />
-              {% else %}
-              <img
-                src="{% static 'images/images.jpeg' %}"
-                alt="{{ student.surname }}'s photo"
-                width="100"
-                class="student-image h-100"
-              />
-              {% endif %}
+
+        <div class="student-profile-content">
+          <!-- Photo and Basic Information Section -->
+          <div class="upload-content">
+            <div class="photo-upload-section">
+              <div class="photo-container" id="photoContainer">
+                {% if student.photo %}
+                <img
+                  id="preview"
+                  src="{{ student.photo.url }}"
+                  alt="Student Photo"
+                />
+                {% else %}
+                <img
+                  id="preview"
+                  src="{% static 'images/images.jpeg' %}"
+                  alt="Student Photo"
+                />
+                {% endif %}
+              </div>
+            </div>
+            <!-- Basic Information -->
+            <div class="form-group">
+              <div class="form-field">
+                <label style="font-weight: 600; color: #2a1b6d; display: block"
+                  >Surname</label
+                >
+                <div>{{ student.surname }}</div>
+              </div>
+              <div class="form-field">
+                <label style="font-weight: 600; color: #2a1b6d; display: block"
+                  >Other Names</label
+                >
+                <div>{{ student.other_names }}</div>
+              </div>
+              <div class="form-field">
+                <label style="font-weight: 600; color: #2a1b6d; display: block"
+                  >Date of Birth</label
+                >
+                <div>{{ student.date_of_birth }}</div>
+              </div>
+              <div class="form-field">
+                <label style="font-weight: 600; color: #2a1b6d; display: block"
+                  >Level</label
+                >
+                <div>{{ student.level }}</div>
+              </div>
+              <div class="form-field">
+                <label style="font-weight: 600; color: #2a1b6d; display: block"
+                  >Department</label
+                >
+                <div>{{ student.department }}</div>
+              </div>
+              <div class="form-field">
+                <label style="font-weight: 600; color: #2a1b6d; display: block"
+                  >Matric Number</label
+                >
+                <div>{{ student.matric_number }}</div>
+              </div>
+              <div class="form-field">
+                <label style="font-weight: 600; color: #2a1b6d; display: block"
+                  >Session</label
+                >
+                <div>{{ student.session }}</div>
+              </div>
+              <div class="form-field">
+                <label
+                  style="
+                    font-weight: 600;
+                    color: #2a1b6d;
+                    margin-bottom: 0.75rem;
+                    display: block;
+                  "
+                  >Home Address</label
+                >
+                <div>{{ student.home_address|default:"N/A" }}</div>
+              </div>
+              <div class="form-field">
+                <label
+                  style="
+                    font-weight: 600;
+                    color: #2a1b6d;
+                    margin-bottom: 0.75rem;
+                    display: block;
+                  "
+                  >Place of Origin</label
+                >
+                <div>{{ student.place_of_origin|default:"N/A" }}</div>
+              </div>
             </div>
           </div>
-          <div class="student-fields">
-            <div class="field-group">
-              <div class="field-label">Surname:</div>
-              <div class="field-value">{{ student.surname }}</div>
+
+          <!-- Student Description Section -->
+          <div class="form-section">
+            <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
+              <h3>Student's Description</h3>
             </div>
-            <div class="field-group">
-              <div class="field-label">Other Names:</div>
-              <div class="field-value">{{ student.other_names }}</div>
-            </div>
-            <div class="field-group">
-              <div class="field-label">Date of Birth:</div>
-              <div class="field-value">{{ student.date_of_birth }}</div>
-            </div>
-            <div class="field-group">
-              <div class="field-label">Level:</div>
-              <div class="field-value">{{ student.level }}</div>
-            </div>
-            <div class="field-group">
-              <div class="field-label">Department:</div>
-              <div class="field-value">{{ student.department }}</div>
-            </div>
-            <div class="field-group">
-              <div class="field-label">Matric Number:</div>
-              <div class="field-value">{{ student.matric_number }}</div>
-            </div>
-            <div class="student-actions">
-              <div class="action-right">
-                <button
-                class="action-btn delete-btn"
-                data-bs-toggle="modal"
-                data-bs-target="#deleteConfirmationModal"
-                >
-                  <i class="lni lni-trash-can"></i>
-                  DELETE
-                </button>
-                <a
-                  href="{% url 'filter_student' student.id %}"
-                  class="text-decoration-none"
-                >
-                  <button class="action-btn bg-warning" style="color: white">
-                    <i class="fas fa-filter" style="color: white"></i>
-                    FILTER
-                  </button>
-                </a>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="form-field">
+                  <label
+                    style="
+                      font-weight: 600;
+                      color: #2a1b6d;
+                      margin-bottom: 0.75rem;
+                      display: block;
+                    "
+                    >Skin Tone</label
+                  >
+                  <div>{{ student.skin_tone|default:"N/A" }}</div>
+                </div>
+                <div class="form-field">
+                  <label
+                    style="
+                      font-weight: 600;
+                      color: #2a1b6d;
+                      margin-bottom: 0.75rem;
+                      display: block;
+                    "
+                    >Weight</label
+                  >
+                  <div>{{ student.weight|default:"N/A" }}</div>
+                </div>
               </div>
-              <div class="action-right">
-                <a
-                  href="{% url 'modify' student.id %}"
-                  class="text-decoration-none"
-                >
-                  <button class="action-btn filter-btn">
-                    <i class="lni lni-pencil"></i>
-                    MODIFY
-                  </button>
-                </a>
-                <a
-                  href="{% url 'export_student_pdf' student.id %}"
-                  class="text-decoration-none"
-                >
-                  <button class="action-btn export-btn">
-                    <i class="lni lni-download"></i>
-                    EXPORT
-                  </button>
-                </a>
+              <div class="form-row">
+                <div class="form-field">
+                  <label
+                    style="
+                      font-weight: 600;
+                      color: #2a1b6d;
+                      margin-bottom: 0.75rem;
+                      display: block;
+                    "
+                    >Height</label
+                  >
+                  <div>{{ student.height|default:"N/A" }}</div>
+                </div>
+                <div class="form-field">
+                  <label
+                    style="
+                      font-weight: 600;
+                      color: #2a1b6d;
+                      margin-bottom: 0.75rem;
+                      display: block;
+                    "
+                    >Other Information</label
+                  >
+                  <div>{{ student.please_state_others|default:"N/A" }}</div>
+                </div>
               </div>
             </div>
+          </div>
+
+          <!-- Parents/Guardian Information Section -->
+          <div class="form-section">
+            <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
+              <h3>Parents/Guardian Information</h3>
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="form-field">
+                  <label
+                    style="
+                      font-weight: 600;
+                      color: #2a1b6d;
+                      margin-bottom: 0.75rem;
+                      display: block;
+                    "
+                    >Parent Surname</label
+                  >
+                  <div>{{ student.parent_surname|default:"N/A" }}</div>
+                </div>
+                <div class="form-field">
+                  <label
+                    style="
+                      font-weight: 600;
+                      color: #2a1b6d;
+                      margin-bottom: 0.75rem;
+                      display: block;
+                    "
+                    >Parent Other Names</label
+                  >
+                  <div>{{ student.parent_other_names|default:"N/A" }}</div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-field">
+                  <label
+                    style="
+                      font-weight: 600;
+                      color: #2a1b6d;
+                      margin-bottom: 0.75rem;
+                      display: block;
+                    "
+                    >Parent Email</label
+                  >
+                  <div>{{ student.parent_email|default:"N/A" }}</div>
+                </div>
+                <div class="form-field">
+                  <label
+                    style="
+                      font-weight: 600;
+                      color: #2a1b6d;
+                      margin-bottom: 0.75rem;
+                      display: block;
+                    "
+                    >Parent Phone</label
+                  >
+                  <div>{{ student.parent_phone|default:"N/A" }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Health Information Section -->
+          <div class="form-section">
+            <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
+              <h3>Health Information of the Student</h3>
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="form-field">
+                  <label
+                    style="
+                      font-weight: 600;
+                      color: #2a1b6d;
+                      margin-bottom: 0.75rem;
+                      display: block;
+                    "
+                    >Allergies</label
+                  >
+                  <div>{{ student.allergies|default:"N/A" }}</div>
+                </div>
+                <div class="form-field">
+                  <label
+                    style="
+                      font-weight: 600;
+                      color: #2a1b6d;
+                      margin-bottom: 0.75rem;
+                      display: block;
+                    "
+                    >Blood Group</label
+                  >
+                  <div>{{ student.blood_group|default:"N/A" }}</div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-field">
+                  <label
+                    style="
+                      font-weight: 600;
+                      color: #2a1b6d;
+                      margin-bottom: 0.75rem;
+                      display: block;
+                    "
+                    >Genotype</label
+                  >
+                  <div>{{ student.genotype|default:"N/A" }}</div>
+                </div>
+                <div class="form-field">
+                  <label
+                    style="
+                      font-weight: 600;
+                      color: #2a1b6d;
+                      margin-bottom: 0.75rem;
+                      display: block;
+                    "
+                    >Other Health Info</label
+                  >
+                  <div>{{ student.if_more_stone|default:"N/A" }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Achievements Section -->
+          <div class="form-section">
+  <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
+    <h3>Achievements of the Student</h3>
+  </div>
+  {% if student.achievements.all %}
+  <div class="achievements-grid">
+    {% for achievement in student.achievements.all %}
+    <div class="achievement-item">
+      <label>{{ achievement.label|default:"No label" }}</label>
+      <div>
+        {% if achievement.file %}
+        <a href="{{ achievement.file.url }}" target="_blank">
+          <i class="lni lni-file"></i> 
+          {{ achievement.file.name|cut:"student_achievements/"|default:"No file" }}
+        </a>
+        {% else %}
+        <span style="color: #999">No file</span>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div
+    style="
+      padding: 2rem;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      color: #999;
+      text-align: center;
+    "
+  >
+    No achievements uploaded
+  </div>
+  {% endif %}
+  <div class="form-field" style="margin-top: 2rem">
+    <label
+      style="
+        font-weight: 600;
+        color: #2a1b6d;
+        margin-bottom: 0.75rem;
+        display: block;
+      "
+      >Other Achievement Info</label
+    >
+    <div>{{ student.other_achievement_info|default:"N/A" }}</div>
+  </div>
+</div>
+          <!-- Images for More Information Section -->
+          <div class="form-section">
+            <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
+              <h3>Images for More Information</h3>
+            </div>
+            {% if student.images.all %}
+            <div class="images-grid">
+              {% for image in student.images.all %}
+              <div class="image-item">
+                <label>{{ image.label }}</label>
+                <div class="image-display">
+                  {% if image.image %}
+                  <img src="{{ image.image.url }}" alt="{{ image.label }}" />
+                  {% else %}
+                  <span style="color: #999">No image</span>
+                  {% endif %}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            {% else %}
+            <div
+              style="
+                padding: 2rem;
+                background-color: #f9f9f9;
+                border-radius: 8px;
+                color: #999;
+                text-align: center;
+              "
+            >
+              No images uploaded
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- Action Buttons Section -->
+          <div
+            style="
+              margin-top: 3rem;
+              display: flex;
+              justify-content: center;
+              gap: 1rem;
+              margin-bottom: 6rem;
+              flex-wrap: wrap;
+            "
+          >
+            <a
+              href="{% url 'modify' student.id %}"
+              class="text-decoration-none"
+            >
+              <button
+                class="action-btn filter-btn"
+                style="
+                  background-color: #2a1b6d;
+                  color: white;
+                  padding: 0.75rem 2rem;
+                  border: none;
+                  border-radius: 25px;
+                  cursor: pointer;
+                  font-weight: 600;
+                  text-decoration: none;
+                "
+              >
+                <i class="lni lni-pencil"></i> MODIFY
+              </button>
+            </a>
+            <a
+              href="{% url 'filter_student' student.id %}"
+              class="text-decoration-none"
+            >
+              <button
+                class="action-btn"
+                style="
+                  background-color: #ffc107;
+                  color: black;
+                  padding: 0.75rem 2rem;
+                  border: none;
+                  border-radius: 25px;
+                  cursor: pointer;
+                  font-weight: 600;
+                  text-decoration: none;
+                "
+              >
+                <i class="lni lni-funnel"></i> FILTER
+              </button>
+            </a>
+            <a
+              href="{% url 'export_student_pdf' student.id %}"
+              class="text-decoration-none"
+            >
+              <button
+                class="action-btn export-btn"
+                style="
+                  background-color: #17a2b8;
+                  color: white;
+                  padding: 0.75rem 2rem;
+                  border: none;
+                  border-radius: 25px;
+                  cursor: pointer;
+                  font-weight: 600;
+                "
+              >
+                <i class="lni lni-download"></i> EXPORT PDF
+              </button>
+            </a>
+            <button
+              class="action-btn delete-btn"
+              style="
+                background-color: #dc3545;
+                color: white;
+                padding: 0.75rem 2rem;
+                border: none;
+                border-radius: 25px;
+                cursor: pointer;
+                font-weight: 600;
+              "
+              onclick="if(confirm('Are you sure you want to delete this student?')) { var form = document.createElement('form'); form.method = 'POST'; form.action = '{% url 'delete_student' student.id %}'; var token = document.createElement('input'); token.type = 'hidden'; token.name = 'csrfmiddlewaretoken'; token.value = getCookie('csrftoken'); form.appendChild(token); document.body.appendChild(form); form.submit(); }"
+            >
+              <i class="lni lni-trash-can"></i> DELETE
+            </button>
           </div>
         </div>
       </main>
 
-      <!-- Modal for Delete Confirmation -->
-      <div
-        class="modal fade"
-        id="deleteConfirmationModal"
-        tabindex="-1"
-        aria-labelledby="deleteConfirmationLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="deleteConfirmationLabel">
-                Confirm Deletion
-              </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              Are you sure you want to delete {{student.surname }}'s details from the system? This action
-              cannot be undone.
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Cancel
-              </button>
-              <form
-                action="{% url 'delete_student' student.id %}"
-                method="POST"
-              >
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Delete</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <footer class="dashboard-footer">
+      <footer class="dashboard-footer mt-5">
         <p>All rights reserved by ESPAM FORMATION UNIVERSITY.</p>
       </footer>
     </div>
+
+    <script>
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+          const cookies = document.cookie.split(";");
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === name + "=") {
+              cookieValue = decodeURIComponent(
+                cookie.substring(name.length + 1)
+              );
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+    </script>
   </body>
 </html>

@@ -1,0 +1,356 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Espam Formation University</title>
+    <link rel="icon" href="{% static 'images/Espam logo.png' %}" type="image/png" />
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <script defer src="{% static 'js/script.js' %}"></script>
+  </head>
+  <body>
+    <div class="dashboard-main">
+      <nav class="dashboard-nav">
+        <div class="dashboard-container">
+          <button class="back-btn" onclick="window.location.href='{% url 'student_details' student.id %}'">
+            <i class="lni lni-arrow-left"></i>
+          </button>
+          <h1 class="dashboard-title">ESPAM FORMATION UNIVERSITY</h1>
+          <img src="{% static 'images/Espam Logo.png' %}" alt="ESPAM Logo" class="nav-logo" />
+        </div>
+      </nav>
+
+      <main class="upload-container">
+        <div class="page-title">
+          <h3>Modify Student Information</h3>
+        </div>
+
+        {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+          <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} fade show">
+            <i class="lni {% if message.tags == 'error' %}lni-close{% else %}lni-checkmark{% endif %}"></i>
+            {{ message }}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data" class="student-upload-form">
+          {% csrf_token %}
+
+          <!-- Photo Upload Section -->
+          <div class="upload-content">
+            <div class="photo-upload-section">
+              <div class="photo-container" id="photoContainer">
+                {% if form.photo.value %}
+                <img id="preview" src="{{ form.photo.value.url }}" alt="Preview" />
+                {% else %}
+                <img id="preview" src="{% static 'images/images.jpeg' %}" alt="Preview" />
+                {% endif %}
+                <div class="upload-overlay">
+                  <i class="lni lni-upload"></i>
+                  <span>UPLOAD AN IMAGE</span>
+                </div>
+              </div>
+              <input type="file" name="photo" id="photoInput" accept="image/*" style="display: none" />
+            </div>
+            {% if form.photo.errors %}
+            <div style="color: red; font-size: 0.85rem; margin-top: 0.5rem">
+              {% for error in form.photo.errors %}
+              <div>{{ error|truncatechars:500 }}</div>
+              {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- Basic Information -->
+            <div class="form-group">
+              <div class="form-field">{{ form.surname }}</div>
+              <div class="form-field">{{ form.other_names }}</div>
+              <div class="form-field">{{ form.date_of_birth }}</div>
+              <div class="form-field">{{ form.level }}</div>
+              <div class="form-field">{{ form.department }}</div>
+              <div class="form-field">{{ form.matric_number }}</div>
+              <div class="form-field">{{ form.password }}</div>
+              <div class="form-field">{{ form.session }}</div>
+              <div class="form-field">{{ form.home_address }}</div>
+              <div class="form-field">{{ form.place_of_origin }}</div>
+            </div>
+          </div>
+
+          <!-- Student Description Section -->
+          <div class="form-section">
+            <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
+              <h3>Student's Description</h3>
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="form-field">{{ form.skin_tone }}</div>
+                <div class="form-field">{{ form.weight }}</div>
+              </div>
+              <div class="form-row">
+                <div class="form-field">{{ form.height }}</div>
+                <div class="form-field">{{ form.please_state_others }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Parents/Guardian Information Section -->
+          <div class="form-section">
+            <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
+              <h3>Parents/ Guardian Information</h3>
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="form-field">{{ form.parent_surname }}</div>
+                <div class="form-field">{{ form.parent_other_names }}</div>
+              </div>
+              <div class="form-row">
+                <div class="form-field">{{ form.parent_email }}</div>
+                <div class="form-field">{{ form.parent_phone }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Health Information Section -->
+          <div class="form-section">
+            <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
+              <h3>Health Information of the Student</h3>
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="form-field">{{ form.allergies }}</div>
+                <div class="form-field">{{ form.blood_group }}</div>
+              </div>
+              <div class="form-row">
+                <div class="form-field">{{ form.genotype }}</div>
+                <div class="form-field">{{ form.if_more_stone }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Achievements Section -->
+          <div class="form-section">
+            <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
+              <h3>Achievements of the Student (6 max)</h3>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 2rem;">
+              {{ achievement_formset.management_form }}
+              {% for achievement_form in achievement_formset %}
+              <div style="box-sizing: border-box; display: flex; flex-direction: column;">
+                <label style="margin-bottom: 0.5rem; font-weight: 600; color: #2a1b6d;">
+                  Achievement {{ forloop.counter }}
+                  {% if achievement_form.instance.pk %}
+                    <span style="color: red; margin-left: 10px; cursor: pointer;" onclick="toggleDelete(this, '{{ achievement_form.DELETE.id_for_label }}')">
+                      <i class="lni lni-trash-can"></i> Delete
+                    </span>
+                  {% endif %}
+                </label>
+
+                <div style="position: relative; height: 280px; border: 3px dashed #2a1b6d; border-radius: 12px; display: flex; align-items: center; justify-content: center; background-color: #f9f9f9; cursor: pointer; margin-bottom: 0.75rem; transition: all 0.3s ease; overflow: hidden;" class="achievement-upload-box">
+                  <div style="text-align: center; pointer-events: none; display: flex; flex-direction: column; align-items: center;" class="achievement-placeholder">
+                    <i class="lni lni-upload" style="font-size: 2.5rem; color: #2a1b6d; margin-bottom: 0.5rem;"></i>
+                    <p style="margin: 0; color: #2a1b6d; font-weight: 600; font-size: 0.9rem;">
+                      {% if achievement_form.instance.pk %} Click to Update {% else %} Click to Upload {% endif %}
+                    </p>
+                    <p style="margin: 0.25rem 0 0 0; color: #999; font-size: 0.8rem;">PDF, DOC, DOCX</p>
+                  </div>
+
+                  <p style="display: none; margin: 0; color: #2a1b6d; font-weight: 600; font-size: 0.85rem; text-align: center; word-break: break-all; padding: 1rem;" class="achievement-filename">
+                    {% if achievement_form.instance.pk and achievement_form.instance.file %}{{ achievement_form.instance.file.name|slice:"24:" }}{% endif %}
+                  </p>
+
+                  {{ achievement_form.file }}
+                </div>
+
+                {{ achievement_form.label }}
+                {% for hidden in achievement_form.hidden_fields %}
+                  {{ hidden }}
+                {% endfor %}
+                {% if achievement_form.DELETE %}
+                  <div style="display: none;">{{ achievement_form.DELETE }}</div>
+                {% endif %}
+                
+                {% if achievement_form.errors %}
+                <div style="color: red; font-size: 0.85rem; margin-top: 0.5rem;">
+                  {% for field, errors in achievement_form.errors.items %}
+                    {% if field != 'id' %}
+                      {% for error in errors %}
+                        <div>{{ error }}</div>
+                      {% endfor %}
+                    {% endif %}
+                  {% endfor %}
+                </div>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+
+            <div class="form-field" style="margin-top: 10px">
+              {{ form.other_achievement_info }}
+            </div>
+          </div>
+
+          <!-- Images for more Information Section -->
+          <div class="form-section">
+            <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
+              <h3>Images for more Information (6 max)</h3>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 2rem;">
+              {{ image_formset.management_form }}
+              {% for image_form in image_formset %}
+              <div style="box-sizing: border-box; display: flex; flex-direction: column;">
+                <label style="margin-bottom: 0.5rem; font-weight: 600; color: #2a1b6d;">
+                  Image {{ forloop.counter }}
+                  {% if image_form.instance.pk %}
+                    <span style="color: red; margin-left: 10px; cursor: pointer;" onclick="toggleDelete(this, '{{ image_form.DELETE.id_for_label }}')">
+                      <i class="lni lni-trash-can"></i> Delete
+                    </span>
+                  {% endif %}
+                </label>
+
+                <div style="position: relative; height: 280px; border: 3px solid #2a1b6d; border-radius: 12px; display: flex; align-items: center; justify-content: center; background-color: #fff; cursor: pointer; margin-bottom: 0.75rem; overflow: hidden; transition: all 0.3s ease;" class="image-upload-box">
+                  {% if image_form.instance.pk and image_form.instance.image %}
+                    <img style="width: 100%; height: 100%; object-fit: cover;" class="image-preview" src="{{ image_form.instance.image.url }}" />
+                  {% else %}
+                    <img style="display: none; width: 100%; height: 100%; object-fit: cover;" class="image-preview" />
+                  {% endif %}
+
+                  <div style="text-align: center; pointer-events: none; display: flex; flex-direction: column; align-items: center;" class="upload-placeholder">
+                    <i class="lni lni-image" style="font-size: 2.5rem; color: #2a1b6d; margin-bottom: 0.5rem;"></i>
+                    <p style="margin: 0; color: #2a1b6d; font-weight: 600; font-size: 0.9rem;">
+                      {% if image_form.instance.pk %} Click to Update {% else %} Click to Upload {% endif %}
+                    </p>
+                    <p style="margin: 0.25rem 0 0 0; color: #999; font-size: 0.8rem;">JPG, PNG, GIF, WebP</p>
+                  </div>
+
+                  {{ image_form.image }}
+                </div>
+
+                {{ image_form.label }}
+                {% for hidden in image_form.hidden_fields %}
+                  {{ hidden }}
+                {% endfor %}
+                {% if image_form.DELETE %}
+                  <div style="display: none;">{{ image_form.DELETE }}</div>
+                {% endif %}
+                
+                {% if image_form.errors %}
+                <div style="color: red; font-size: 0.85rem; margin-top: 0.5rem;">
+                  {% for field, errors in image_form.errors.items %}
+                    {% if field != 'id' %}
+                      {% for error in errors %}
+                        <div>{{ error }}</div>
+                      {% endfor %}
+                    {% endif %}
+                  {% endfor %}
+                </div>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="button-group" style="margin-bottom: 5rem; display: flex; justify-content: center">
+            <button type="submit" class="submit-btn">UPDATE</button>
+          </div>
+        </form>
+      </main>
+
+      <footer class="dashboard-footer mt-5">
+        <p>All rights reserved by ESPAM FORMATION UNIVERSITY.</p>
+      </footer>
+    </div>
+
+    <script>
+      function toggleDelete(element, deleteFieldId) {
+        const deleteField = document.getElementById(deleteFieldId);
+        const container = element.closest('div[style*="flex-direction: column"]');
+        
+        if (deleteField.checked) {
+          deleteField.checked = false;
+          container.style.opacity = '1';
+          element.innerHTML = '<i class="lni lni-trash-can"></i> Delete';
+        } else {
+          deleteField.checked = true;
+          container.style.opacity = '0.5';
+          element.innerHTML = '<i class="lni lni-undo"></i> Undo';
+        }
+      }
+
+      document.getElementById("photoContainer").addEventListener("click", function () {
+        document.getElementById("photoInput").click();
+      });
+
+      document.getElementById("photoInput").addEventListener("change", function (e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            document.getElementById("preview").src = event.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Achievement upload box click handler
+      document.querySelectorAll(".achievement-upload-box").forEach(function (box) {
+        const fileInput = box.querySelector('input[type="file"]');
+        const placeholder = box.querySelector(".achievement-placeholder");
+        const filename = box.querySelector(".achievement-filename");
+
+        box.addEventListener("click", function () {
+          fileInput.click();
+        });
+
+        fileInput.addEventListener("change", function (e) {
+          const file = e.target.files[0];
+          if (file) {
+            filename.textContent = file.name;
+            filename.style.display = "block";
+            placeholder.style.display = "none";
+          }
+        });
+
+        // Show filename if already exists
+        if (filename.textContent.trim()) {
+          filename.style.display = "block";
+          placeholder.style.display = "none";
+        }
+      });
+
+      // Image upload box click handler with preview
+      document.querySelectorAll(".image-upload-box").forEach(function (box) {
+        const imageInput = box.querySelector('input[type="file"]');
+        const preview = box.querySelector(".image-preview");
+        const placeholder = box.querySelector(".upload-placeholder");
+
+        box.addEventListener("click", function () {
+          imageInput.click();
+        });
+
+        imageInput.addEventListener("change", function (e) {
+          const file = e.target.files[0];
+          if (file && file.type.startsWith("image/")) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+              preview.src = event.target.result;
+              preview.style.display = "block";
+              placeholder.style.display = "none";
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+
+        // Show preview if image already exists
+        if (preview.src && preview.src.trim() && !preview.src.includes('data:')) {
+          preview.style.display = "block";
+          placeholder.style.display = "none";
+        }
+      });
+    </script>
+  </body>
+</html>

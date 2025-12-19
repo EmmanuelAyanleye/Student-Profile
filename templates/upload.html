@@ -5,7 +5,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Espam Formation University</title>
-    <link rel="icon" href="{% static 'images/Espam logo.png' %}" type="image/png">
+    <link
+      rel="icon"
+      href="{% static 'images/Espam logo.png' %}"
+      type="image/png"
+    />
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <script defer src="{% static 'js/script.js' %}"></script>
@@ -14,9 +18,12 @@
     <div class="dashboard-main">
       <nav class="dashboard-nav">
         <div class="dashboard-container">
-          <button class="back-btn" onclick="window.location.href='{% url 'view_students' %}'">
-                <i class="lni lni-arrow-left"></i>
-            </button>
+          <button
+            class="back-btn"
+            onclick="window.location.href='{% url 'view_students' %}'"
+          >
+            <i class="lni lni-arrow-left"></i>
+          </button>
           <h1 class="dashboard-title">ESPAM FORMATION UNIVERSITY</h1>
           <img
             src="{% static 'images/Espam Logo.png' %}"
@@ -28,8 +35,9 @@
 
       <main class="upload-container">
         <div class="page-title">
-          <h3>Complete To Upload a Student Information.</h3>
+          <h3>Complete To upload a Student Information</h3>
         </div>
+
         {% if messages %}
         <div class="messages">
           {% for message in messages %}
@@ -45,117 +53,482 @@
         </div>
         {% endif %}
 
-        <div class="upload-content">
-          <form class="upload-form" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="row">
-              <div class="photo-upload-section col-md-6">
-                <div class="photo-container">
-                  <img id="preview" src="" alt="" />
-                  <div class="upload-overlay">
-                    <i class="lni lni-upload"></i>
-                    <span>UPLOAD A PICTURE</span>
-                  </div>
-                  <input
-                    type="file"
-                    name="photo"
-                    id="photo-upload"
-                    accept="image/*"
-                    class="photo-input" required
-                  />
+        <form
+          method="POST"
+          enctype="multipart/form-data"
+          class="student-upload-form"
+        >
+          {% csrf_token %}
+
+          <!-- Photo Upload Section -->
+          <div class="upload-content">
+            <div class="photo-upload-section">
+              <div class="photo-container" id="photoContainer">
+                {% if form.photo.value %}
+                <img
+                  id="preview"
+                  src="{{ form.photo.value.url }}"
+                  alt="Preview"
+                />
+                {% else %}
+                <img
+                  id="preview"
+                  src="{% static 'images/images.jpeg' %}"
+                  alt="Preview"
+                />
+                {% endif %}
+                <div class="upload-overlay">
+                  <i class="lni lni-upload"></i>
+                  <span>UPLOAD AN IMAGE</span>
                 </div>
               </div>
+              <input
+                type="file"
+                name="photo"
+                id="photoInput"
+                accept="image/*"
+                style="display: none"
+              />
+            </div>
+            <!-- Basic Information -->
+            <div class="form-group">
+              <div class="form-field">{{ form.surname }}</div>
+              <div class="form-field">{{ form.other_names }}</div>
+              <div class="form-field">{{ form.date_of_birth }}</div>
+              <div class="form-field">{{ form.level }}</div>
+              <div class="form-field">{{ form.department }}</div>
+              <div class="form-field">{{ form.matric_number }}</div>
+              <div class="form-field">{{ form.password }}</div>
+              <div class="form-field">{{ form.session }}</div>
+              <div class="form-field">{{ form.home_address }}</div>
+              <div class="form-field">{{ form.place_of_origin }}</div>
+            </div>
+          </div>
 
-              <div class="col-md-6">
-                <div class="form-field">
-                  <span class="field-name">Surname:</span>
-                  <input
-                    type="text"
-                    name="surname"
-                    class="form-input"
-                    placeholder="Lastname"
-                    required
-                  />
-                </div>
-                <div class="form-field">
-                  <span class="field-name">Other Names:</span>
-                  <input
-                    type="text"
-                    name="other_names"
-                    class="form-input"
-                    placeholder="Other Name"
-                    required
-                  />
-                </div>
-                <div class="form-field">
-                  <span class="field-name">Date of Birth:</span>
-                  <input
-                    type="date"
-                    name="date_of_birth"
-                    class="form-input"
-                    required
-                  />
-                </div>
-                <div class="form-field">
-                  <span class="field-name">Level:</span>
-                  <select name="level" class="form-input" required>
-                    <option value="" disabled selected>Select Level</option>
-                    <option value="100">100</option>
-                    <option value="200">200</option>
-                    <option value="300">300</option>
-                    <option value="400">400</option>
-                  </select>
-                </div>
-                <div class="form-field">
-                <span class="field-name">Department:</span>
-                <select name="department" class="form-input" required>
-                    <option value="" disabled selected>Select Department</option>
-                    {% for code, name in form.fields.department.choices %}
-                    {% if code != '' %}
-                        <option value="{{ code }}">{{ name }}</option>
-                    {% endif %}
-                    {% endfor %}
-                </select>
-                </div>
-
-                <div class="form-field">
-                  <span class="field-name">Matric Number:</span>
-                  <input
-                    type="text"
-                    name="matric_number"
-                    class="form-input"
-                    required
-                    value="{{ form.data.matric_number|default:'' }}"
-                  />
-
-                  {% if form.matric_number.errors %}
-                  <div class="form-error">
-                    {{ form.matric_number.errors.0 }}
-                  </div>
-                  {% endif %}
-                </div>
-                <button type="submit" class="submit-btn">
-                  <i class="lni lni-upload"></i> UPLOAD
-                </button>
+          <!-- Student Description Section -->
+          <div class="form-section">
+            <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
+              <h3>Student's Description</h3>
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="form-field">{{ form.skin_tone }}</div>
+                <div class="form-field">{{ form.weight }}</div>
+              </div>
+              <div class="form-row">
+                <div class="form-field">{{ form.height }}</div>
+                <div class="form-field">{{ form.please_state_others }}</div>
               </div>
             </div>
-          </form>
+          </div>
+
+          <!-- Parents/Guardian Information Section -->
+          <div class="form-section">
+            <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
+              <h3>Parents/ Guardian Information</h3>
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="form-field">{{ form.parent_surname }}</div>
+                <div class="form-field">{{ form.parent_other_names }}</div>
+              </div>
+              <div class="form-row">
+                <div class="form-field">{{ form.parent_email }}</div>
+                <div class="form-field">{{ form.parent_phone }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Health Information Section -->
+          <div class="form-section">
+            <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
+              <h3>Health Information of the Student</h3>
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="form-field">{{ form.allergies }}</div>
+                <div class="form-field">{{ form.blood_group }}</div>
+              </div>
+              <div class="form-row">
+                <div class="form-field">{{ form.genotype }}</div>
+                <div class="form-field">{{ form.if_more_stone }}</div>
+              </div>
+            </div>
+          </div>
+          <!-- Achievements Section -->
+<div class="form-section">
+  <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
+    <h3>Achievements of the Student (6 max)</h3>
+  </div>
+
+  <div
+    style="
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 2rem;
+    "
+  >
+    {{ achievement_formset.management_form }}
+    {% for form in achievement_formset %}
+    <div
+      style="
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        width: 260px;
+      "
+    >
+      <label
+        style="
+          margin-bottom: 0.5rem;
+          font-weight: 600;
+          color: #2a1b6d;
+        "
+      >
+        Achievement {{ forloop.counter }}
+      </label>
+
+      <div
+        style="
+          position: relative;
+          height: 280px;
+          border: 3px dashed #2a1b6d;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #f9f9f9;
+          cursor: pointer;
+          margin-bottom: 0.75rem;
+          transition: all 0.3s ease;
+          overflow: hidden;
+        "
+        class="achievement-upload-box"
+      >
+        <div
+          style="
+            text-align: center;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          "
+          class="achievement-placeholder"
+        >
+          <i
+            class="lni lni-upload"
+            style="
+              font-size: 2.5rem;
+              color: #2a1b6d;
+              margin-bottom: 0.5rem;
+            "
+          ></i>
+          <p
+            style="
+              margin: 0;
+              color: #2a1b6d;
+              font-weight: 600;
+              font-size: 0.9rem;
+            "
+          >
+            Click to Upload
+          </p>
+          <p
+            style="
+              margin: 0.25rem 0 0 0;
+              color: #999;
+              font-size: 0.8rem;
+            "
+          >
+            PDF, DOC, DOCX
+          </p>
         </div>
+
+        <p
+          style="
+            display: none;
+            margin: 0;
+            color: #2a1b6d;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-align: center;
+            word-break: break-all;
+            padding: 1rem;
+          "
+          class="achievement-filename"
+        ></p>
+
+        {{ form.file }}
+      </div>
+
+      {{ form.label }}
+      {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+      {% endfor %}
+      {% if form.errors %}
+      <div style="color: red; font-size: 0.85rem; margin-top: 0.5rem">
+        {{ form.errors }}
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="form-field" style="margin-top: 10px">
+    {{ form.other_achievement_info }}
+  </div>
+</div>
+
+<!-- Images for more Information Section -->
+<div class="form-section">
+  <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
+    <h3>Images for more Information (6 max)</h3>
+  </div>
+
+  <div
+    id="imagesContainer"
+    style="
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 2rem;
+    "
+  >
+
+    {{ image_formset.management_form }}
+    {% for form in image_formset %}
+    <div
+      style="
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+          width: 260px;
+      "
+    >
+      <label
+        style="
+          margin-bottom: 0.5rem;
+          font-weight: 600;
+          color: #2a1b6d;
+        "
+      >
+        Image {{ forloop.counter }}
+      </label>
+
+      <div
+        style="
+          position: relative;
+          height: 280px;
+          border: 3px solid #2a1b6d;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #fff;
+          cursor: pointer;
+          margin-bottom: 0.75rem;
+          overflow: hidden;
+          transition: all 0.3s ease;
+        "
+        class="image-upload-box"
+        data-form-id="id_image_{{ forloop.counter0 }}-image"
+      >
+        <img
+          style="
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          "
+          class="image-preview"
+        />
+
+        <div
+          style="
+            text-align: center;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          "
+          class="upload-placeholder"
+        >
+          <i
+            class="lni lni-image"
+            style="
+              font-size: 2.5rem;
+              color: #2a1b6d;
+              margin-bottom: 0.5rem;
+            "
+          ></i>
+          <p
+            style="
+              margin: 0;
+              color: #2a1b6d;
+              font-weight: 600;
+              font-size: 0.9rem;
+            "
+          >
+            Click to Upload
+          </p>
+          <p
+            style="
+              margin: 0.25rem 0 0 0;
+              color: #999;
+              font-size: 0.8rem;
+            "
+          >
+            JPG, PNG, GIF, WebP
+          </p>
+        </div>
+
+        {{ form.image }}
+      </div>
+
+      {{ form.label }}
+      {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+      {% endfor %}
+      {% if form.errors %}
+      <div style="color: red; font-size: 0.85rem; margin-top: 0.5rem">
+        {{ form.errors }}
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+          <!-- Submit Button -->
+          <div
+            class="button-group"
+            style="margin-bottom: 5rem; display: flex; justify-content: center"
+          >
+            <button type="submit" class="submit-btn">UPLOAD</button>
+          </div>
+        </form>
       </main>
 
-      <footer class="dashboard-footer">
+      <footer class="dashboard-footer mt-5">
         <p>All rights reserved by ESPAM FORMATION UNIVERSITY.</p>
       </footer>
     </div>
 
     <script>
-      document.getElementById("photo-upload").onchange = function (e) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          document.getElementById("preview").src = e.target.result;
-        };
-        reader.readAsDataURL(e.target.files[0]);
-      };
+      document
+        .getElementById("photoContainer")
+        .addEventListener("click", function () {
+          document.getElementById("photoInput").click();
+        });
+
+      document
+        .getElementById("photoInput")
+        .addEventListener("change", function (e) {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+              document.getElementById("preview").src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+
+      // Achievement upload box click handler
+      document
+        .querySelectorAll(".achievement-upload-box")
+        .forEach(function (box) {
+          const fileInput = box.querySelector('input[type="file"]');
+          const placeholder = box.querySelector(".achievement-placeholder");
+          const filename = box.querySelector(".achievement-filename");
+
+          box.addEventListener("click", function () {
+            fileInput.click();
+          });
+
+          fileInput.addEventListener("change", function (e) {
+            const file = e.target.files[0];
+            if (file) {
+              filename.textContent = file.name;
+              filename.style.display = "block";
+              placeholder.style.display = "none";
+            }
+          });
+        });
+
+      // Image upload box click handler with preview
+      document.querySelectorAll(".image-upload-box").forEach(function (box) {
+        const imageInput = box.querySelector('input[type="file"]');
+        const preview = box.querySelector(".image-preview");
+        const placeholder = box.querySelector(".upload-placeholder");
+
+        box.addEventListener("click", function () {
+          imageInput.click();
+        });
+
+        imageInput.addEventListener("change", function (e) {
+          const file = e.target.files[0];
+          if (file && file.type.startsWith("image/")) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+              preview.src = event.target.result;
+              preview.style.display = "block";
+              placeholder.style.display = "none";
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+
+        // Show preview if image already exists
+        if (
+          imageInput.nextElementSibling &&
+          imageInput.nextElementSibling.tagName === "IMG"
+        ) {
+          const existingImg = imageInput.nextElementSibling;
+          preview.src = existingImg.src;
+          preview.style.display = "block";
+          placeholder.style.display = "none";
+        }
+      });
+
+      // Prevent default drag and drop behavior
+      document
+        .querySelectorAll(".image-upload-box, .achievement-upload-box")
+        .forEach(function (box) {
+          box.addEventListener("dragover", function (e) {
+            e.preventDefault();
+            box.style.borderColor = "#ff6b6b";
+            box.style.backgroundColor = "#fff5f5";
+          });
+
+          box.addEventListener("dragleave", function (e) {
+            e.preventDefault();
+            box.style.borderColor = "#2a1b6d";
+            if (box.classList.contains("achievement-upload-box")) {
+              box.style.backgroundColor = "#f9f9f9";
+            } else {
+              box.style.backgroundColor = "#fff";
+            }
+          });
+
+          box.addEventListener("drop", function (e) {
+            e.preventDefault();
+            box.style.borderColor = "#2a1b6d";
+            if (box.classList.contains("achievement-upload-box")) {
+              box.style.backgroundColor = "#f9f9f9";
+            } else {
+              box.style.backgroundColor = "#fff";
+            }
+
+            const fileInput = box.querySelector('input[type="file"]');
+            fileInput.files = e.dataTransfer.files;
+
+            // Trigger change event
+            const event = new Event("change", { bubbles: true });
+            fileInput.dispatchEvent(event);
+          });
+        });
     </script>
   </body>
 </html>
