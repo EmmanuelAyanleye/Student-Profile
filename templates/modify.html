@@ -10,6 +10,36 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <script defer src="{% static 'js/script.js' %}"></script>
     <style>
+      .password-container {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 10;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-password:hover {
+    color: #2a1b6d;
+}
+
+.password-container .form-control {
+    padding-right: 40px;
+}
+
       input[type="checkbox"][name$="-DELETE"] {
         display: none !important;
       }
@@ -211,7 +241,15 @@
               <div class="form-field">{{ form.level }}</div>
               <div class="form-field">{{ form.department }}</div>
               <div class="form-field">{{ form.matric_number }}</div>
-              <div class="form-field">{{ form.password }}</div>
+              <div class="form-field password-container">
+                {{ form.password }}
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('id_password')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </button>
+              </div>
               <div class="form-field">{{ form.session }}</div>
               <div class="form-field">{{ form.home_address }}</div>
               <div class="form-field">{{ form.place_of_origin }}</div>
@@ -235,6 +273,23 @@
             </div>
           </div>
 
+          <!-- Health Information Section -->
+          <div class="form-section">
+            <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
+              <h3>Health Information of the Student</h3>
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="form-field">{{ form.allergies }}</div>
+                <div class="form-field">{{ form.blood_group }}</div>
+              </div>
+              <div class="form-row">
+                <div class="form-field">{{ form.genotype }}</div>
+                <div class="form-field">{{ form.if_more_stone }}</div>
+              </div>
+            </div>
+          </div>
+
           <!-- Parents/Guardian Information Section -->
           <div class="form-section">
             <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
@@ -252,22 +307,7 @@
             </div>
           </div>
 
-          <!-- Health Information Section -->
-          <div class="form-section">
-            <div class="page-title" style="margin-top: 3rem; font-size: 1rem">
-              <h3>Health Information of the Student</h3>
-            </div>
-            <div class="form-group">
-              <div class="form-row">
-                <div class="form-field">{{ form.allergies }}</div>
-                <div class="form-field">{{ form.blood_group }}</div>
-              </div>
-              <div class="form-row">
-                <div class="form-field">{{ form.genotype }}</div>
-                <div class="form-field">{{ form.if_more_stone }}</div>
-              </div>
-            </div>
-          </div>
+          
 
           <!-- Achievements Section -->
           <div class="form-section">
@@ -894,6 +934,21 @@
           }
         });
       });
+
+      function togglePasswordVisibility(passwordFieldId) {
+          const passwordField = document.getElementById(passwordFieldId);
+          const toggleButton = passwordField.nextElementSibling;
+          
+          if (passwordField.type === "password") {
+              passwordField.type = "text";
+              toggleButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path><line x1="2" y1="2" x2="22" y2="22"></line></svg>';
+              toggleButton.setAttribute("aria-label", "Hide password");
+          } else {
+              passwordField.type = "password";
+              toggleButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+              toggleButton.setAttribute("aria-label", "Show password");
+          }
+      }
     </script>
   </body>
 </html>

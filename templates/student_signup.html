@@ -26,6 +26,100 @@
       href="{% static 'css/style.css' %}"
     />
 
+    <style>
+      .password-container {
+        position: relative;
+      }
+
+      .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        padding: 4px;
+        z-index: 10;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .toggle-password:hover {
+        color: #2a1b6d;
+      }
+
+      .password-container .form-control {
+        padding-right: 40px;
+      }
+      
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .row.justify-content-between.align-items-center {
+          flex-direction: column-reverse;
+        }
+        
+        .col-md-5, .col-md-6 {
+          width: 100%;
+          max-width: 100%;
+          flex: 0 0 100%;
+        }
+        
+        .network-image {
+          margin-bottom: 30px;
+          text-align: center;
+        }
+        
+        .network-image img {
+          max-width: 80%;
+          height: auto;
+        }
+        
+        .login-form-container {
+          margin-top: 20px;
+        }
+      }
+      
+      @media (max-width: 576px) {
+        .login-form-container {
+          padding: 15px;
+        }
+        
+        .form-group {
+          margin-bottom: 15px;
+        }
+        
+        .form-control {
+          font-size: 14px;
+          padding: 10px 12px;
+        }
+        
+        .password-container .form-control {
+          padding-right: 45px;
+        }
+        
+        .toggle-password {
+          right: 8px;
+          width: 25px;
+          height: 25px;
+        }
+        
+        .toggle-password svg {
+          width: 18px;
+          height: 18px;
+        }
+        
+        .login-btn {
+          padding: 10px 20px;
+          font-size: 14px;
+        }
+      }
+    </style>
+
     <script defer src="{% static 'js/script.js' %}"></script>
   </head>
   <body>
@@ -120,14 +214,37 @@
                   >
                   {% endif %}
                 </div>
-                <div class="form-group">
+                <div class="form-group password-container">
                   <input
                     type="password"
                     class="form-control"
                     placeholder="Password"
                     name="password"
+                    id="signupPassword"
                     required
                   />
+                  <button
+                    type="button"
+                    class="toggle-password"
+                    onclick="togglePasswordVisibility('signupPassword')"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                      ></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  </button>
                   {% if form.password.errors %}
                   <small class="text-danger"
                     >{{ form.password.errors.0 }}</small
@@ -161,6 +278,27 @@
         All rights reserved by ESPAM FORMATION UNIVERSITY
       </p>
     </div>
+
+    <script>
+      function togglePasswordVisibility(passwordFieldId) {
+        const passwordField = document.getElementById(passwordFieldId);
+        const toggleButton = passwordField.nextElementSibling;
+
+        if (passwordField.type === "password") {
+          passwordField.type = "text";
+          // Hide icon (eye with slash)
+          toggleButton.innerHTML =
+            '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path><line x1="2" y1="2" x2="22" y2="22"></line></svg>';
+          toggleButton.setAttribute("aria-label", "Hide password");
+        } else {
+          passwordField.type = "password";
+          // Show icon (eye)
+          toggleButton.innerHTML =
+            '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+          toggleButton.setAttribute("aria-label", "Show password");
+        }
+      }
+    </script>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -56,176 +56,307 @@
       .login-form.active {
         display: block;
       }
+      
+      /* Password field container */
+      .password-container {
+        position: relative;
+      }
+      
+      /* Password toggle icon */
+      .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        padding: 4px;
+        z-index: 10;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .toggle-password:hover {
+        color: #2a1b6d;
+      }
+      
+      .toggle-password i {
+        font-size: 18px;
+      }
+      
+      /* Add padding to password fields to prevent text overlap */
+      .password-container .form-control {
+        padding-right: 40px;
+      }
     </style>
-  </head>
-  <body>
-    <div class="top-shapes">
-      <div class="top-shape-left"></div>
-      <div class="top-shape-right"></div>
-    </div>
+</head>
+<body>
+<div class="top-shapes">
+  <div class="top-shape-left"></div>
+  <div class="top-shape-right"></div>
+</div>
 
-    <div class="main-content container">
-      <div class="content-wrapper">
-        <div class="row justify-content-between align-items-center">
-          <div class="col-md-5">
-            <div class="login-form-container">
-              <!-- Toggle Buttons -->
-              <div class="toggle-container">
-                <button
-                  type="button"
-                  class="toggle-btn {% if active_form == 'admin' or not active_form %}active{% endif %}"
-                  id="adminToggle"
-                  onclick="toggleForm('admin')"
-                >
-                  <i class="lni lni-shield"></i> Admin/Staff Login
-                </button>
-                <button
-                  type="button"
-                  class="toggle-btn {% if active_form == 'student' %}active{% endif %}"
-                  id="studentToggle"
-                  onclick="toggleForm('student')"
-                >
-                  <i class="lni lni-user"></i> Student Login
-                </button>
-              </div>
-
-              <!-- Admin Login Form -->
-              <div
-                class="login-form {% if active_form == 'admin' or not active_form %}active{% endif %}"
-                id="adminForm"
-              >
-                <h2 class="login-title">Admin/Staff Login</h2>
-                {% if messages %}
-                <div class="messages">
-                  {% for message in messages %}
-                  <div
-                    class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} fade show"
-                  >
-                    <i
-                      class="lni {% if message.tags == 'error' %}lni-close{% else %}lni-checkmark{% endif %}"
-                    ></i>
-                    {{ message }}
-                  </div>
-                  {% endfor %}
-                </div>
-                {% endif %}
-                <form method="POST" action="{% url 'login' %}">
-                  {% csrf_token %}
-                  <div class="form-group">
-                    <input
-                      type="email"
-                      class="form-control"
-                      placeholder="Email"
-                      name="email"
-                      required
-                    />
-                  </div>
-                  <div class="form-group">
-                    <input
-                      type="password"
-                      class="form-control"
-                      placeholder="Password"
-                      name="password"
-                      required
-                    />
-                  </div>
-                  <button type="submit" class="login-btn">Login</button>
-                </form>
-              </div>
-
-              <!-- Student Login Form -->
-              <div
-                class="login-form {% if active_form == 'student' %}active{% endif %}"
-                id="studentForm"
-              >
-                <h2 class="login-title">Student Login</h2>
-                {% if messages and active_form == 'student' %}
-                <div class="messages">
-                  {% for message in messages %}
-                  <div
-                    class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} fade show"
-                  >
-                    <i
-                      class="lni {% if message.tags == 'error' %}lni-close{% else %}lni-checkmark{% endif %}"
-                    ></i>
-                    {{ message }}
-                  </div>
-                  {% endfor %}
-                </div>
-                {% endif %}
-                <form method="POST" action="{% url 'student_login' %}">
-                  {% csrf_token %}
-                  <div class="form-group">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Matric Number"
-                      name="matric_number"
-                      required
-                    />
-                  </div>
-                  <div class="form-group">
-                    <input
-                      type="password"
-                      class="form-control"
-                      placeholder="Password"
-                      name="password"
-                      required
-                    />
-                  </div>
-                  <button type="submit" class="login-btn">Login</button>
-                </form>
-                <p class="text-center mt-3">
-                  Haven't registered yet?
-                  <a
-                    href="{% url 'student_signup' %}"
-                    style="color: #2a1b6d; font-weight: 600"
-                    >Sign Up here</a
-                  >
-                </p>
-              </div>
-
-              <p class="text-center mt-3">
-                <a
-                  href="{% url 'home' %}"
-                  style="color: #2a1b6d; font-weight: 600"
-                  >Back to Home</a
-                >
-              </p>
-            </div>
+<div class="main-content container">
+  <div class="content-wrapper">
+    <div class="row justify-content-between align-items-center">
+      <div class="col-md-5">
+        <div class="login-form-container">
+          <!-- Toggle Buttons -->
+          <div class="toggle-container">
+            <button
+              type="button"
+              class="toggle-btn {% if active_form == 'admin' or not active_form %}active{% endif %}"
+              id="adminToggle"
+              onclick="toggleForm('admin')"
+            >
+              <i class="lni lni-shield"></i> Admin/Staff Login
+            </button>
+            <button
+              type="button"
+              class="toggle-btn {% if active_form == 'student' %}active{% endif %}"
+              id="studentToggle"
+              onclick="toggleForm('student')"
+            >
+              <i class="lni lni-user"></i> Student Login
+            </button>
           </div>
-          <div class="col-md-6">
-            <div class="network-image">
-              <img
-                src="{% static 'images/network.png' %}"
-                alt="Network Globe"
-                class="img-fluid"
-              />
+
+          <!-- Admin Login Form -->
+          <div
+            class="login-form {% if active_form == 'admin' or not active_form %}active{% endif %}"
+            id="adminForm"
+          >
+            <h2 class="login-title">Admin/Staff Login</h2>
+            {% if messages %}
+            <div class="messages">
+              {% for message in messages %}
+              <div
+                class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} fade show"
+              >
+                <i
+                  class="lni {% if message.tags == 'error' %}lni-close{% else %}lni-checkmark{% endif %}"
+                ></i>
+                {{ message }}
+              </div>
+              {% endfor %}
             </div>
+            {% endif %}
+            <form method="POST" action="{% url 'login' %}">
+              {% csrf_token %}
+              <div class="form-group">
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Email"
+                  name="email"
+                  required
+                />
+              </div>
+              <div class="form-group password-container">
+                <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Password"
+                  name="password"
+                  id="adminPassword"
+                  required
+                />
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('adminPassword')">
+                  <i class="lni lni-eye"></i>
+                </button>
+              </div>
+              <button type="submit" class="login-btn">Login</button>
+            </form>
           </div>
+
+          <!-- Student Login Form -->
+          <div
+            class="login-form {% if active_form == 'student' %}active{% endif %}"
+            id="studentForm"
+          >
+            <h2 class="login-title">Student Login</h2>
+            {% if messages and active_form == 'student' %}
+            <div class="messages">
+              {% for message in messages %}
+              <div
+                class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} fade show"
+              >
+                <i
+                  class="lni {% if message.tags == 'error' %}lni-close{% else %}lni-checkmark{% endif %}"
+                ></i>
+                {{ message }}
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+            <form method="POST" action="{% url 'student_login' %}">
+              {% csrf_token %}
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Matric Number"
+                  name="matric_number"
+                  required
+                />
+              </div>
+              <div class="form-group password-container">
+                <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Password"
+                  name="password"
+                  id="studentPassword"
+                  required
+                />
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('studentPassword')">
+                  <i class="lni lni-eye"></i>
+                </button>
+              </div>
+              <button type="submit" class="login-btn">Login</button>
+            </form>
+            <p class="text-center mt-3">
+              Haven't registered yet?
+              <a
+                href="{% url 'student_signup' %}"
+                style="color: #2a1b6d; font-weight: 600"
+                >Sign Up here</a
+              >
+            </p>
+          </div>
+
+          <p class="text-center mt-3">
+            <a
+              href="{% url 'home' %}"
+              style="color: #2a1b6d; font-weight: 600"
+              >Back to Home</a
+            >
+          </p>
         </div>
       </div>
-      <p class="copyright text-center">
-        All rights reserved by ESPAM FORMATION UNIVERSITY
-      </p>
+      <div class="col-md-6">
+        <div class="network-image">
+          <img
+            src="{% static 'images/network.png' %}"
+            alt="Network Globe"
+            class="img-fluid"
+          />
+        </div>
+      </div>
     </div>
+  </div>
+  <p class="copyright text-center">
+    All rights reserved by ESPAM FORMATION UNIVERSITY
+  </p>
+</div>
 
-    <script>
-      function toggleForm(type) {
-        if (type === "admin") {
-          document.getElementById("adminForm").classList.add("active");
-          document.getElementById("studentForm").classList.remove("active");
-          document.getElementById("adminToggle").classList.add("active");
-          document.getElementById("studentToggle").classList.remove("active");
-        } else {
-          document.getElementById("studentForm").classList.add("active");
-          document.getElementById("adminForm").classList.remove("active");
-          document.getElementById("studentToggle").classList.add("active");
-          document.getElementById("adminToggle").classList.remove("active");
-        }
+<script>
+  function toggleForm(type) {
+    if (type === "admin") {
+      document.getElementById("adminForm").classList.add("active");
+      document.getElementById("studentForm").classList.remove("active");
+      document.getElementById("adminToggle").classList.add("active");
+      document.getElementById("studentToggle").classList.remove("active");
+    } else {
+      document.getElementById("studentForm").classList.add("active");
+      document.getElementById("adminForm").classList.remove("active");
+      document.getElementById("studentToggle").classList.add("active");
+      document.getElementById("adminToggle").classList.remove("active");
+    }
+  }
+
+  function togglePasswordVisibility(passwordFieldId) {
+    const passwordField = document.getElementById(passwordFieldId);
+    const toggleButton = passwordField.nextElementSibling;
+    const icon = toggleButton.querySelector('i');
+    
+    if (passwordField.type === "password") {
+      passwordField.type = "text";
+      // Use the correct icon class - some versions use lni-unlock or lni-lock
+      // Let's use a more reliable approach
+      if (icon.classList.contains("lni-eye")) {
+        icon.classList.remove("lni-eye");
+        icon.classList.add("lni-eye-off"); // Alternative icon
+      } else if (icon.classList.contains("lni-unlock")) {
+        icon.classList.remove("lni-unlock");
+        icon.classList.add("lni-lock");
+      } else {
+        // Fallback: change the class to something else
+        icon.classList.remove("lni-eye");
+        icon.classList.add("lni-lock");
       }
-    </script>
+      toggleButton.setAttribute("aria-label", "Hide password");
+    } else {
+      passwordField.type = "password";
+      // Revert to the original icon
+      if (icon.classList.contains("lni-eye-off")) {
+        icon.classList.remove("lni-eye-off");
+        icon.classList.add("lni-eye");
+      } else if (icon.classList.contains("lni-lock")) {
+        icon.classList.remove("lni-lock");
+        icon.classList.add("lni-unlock");
+      } else {
+        icon.classList.remove("lni-lock");
+        icon.classList.add("lni-eye");
+      }
+      toggleButton.setAttribute("aria-label", "Show password");
+    }
+  }
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+  // Alternative: Use a simpler approach with SVG icons
+  function togglePasswordVisibilityAlt(passwordFieldId) {
+    const passwordField = document.getElementById(passwordFieldId);
+    const toggleButton = passwordField.nextElementSibling;
+    
+    if (passwordField.type === "password") {
+      passwordField.type = "text";
+      // Use inline SVG for eye-off
+      toggleButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path><line x1="2" y1="2" x2="22" y2="22"></line></svg>';
+      toggleButton.setAttribute("aria-label", "Hide password");
+    } else {
+      passwordField.type = "password";
+      // Use inline SVG for eye
+      toggleButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+      toggleButton.setAttribute("aria-label", "Show password");
+    }
+  }
+
+  // Initialize password toggle buttons
+  document.addEventListener('DOMContentLoaded', function() {
+    // Update the onclick events to use the SVG version
+    const adminToggleBtn = document.querySelector('#adminPassword + .toggle-password');
+    const studentToggleBtn = document.querySelector('#studentPassword + .toggle-password');
+    
+    if (adminToggleBtn) {
+      adminToggleBtn.setAttribute('onclick', 'togglePasswordVisibilityAlt("adminPassword")');
+      // Set initial SVG
+      adminToggleBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+    }
+    
+    if (studentToggleBtn) {
+      studentToggleBtn.setAttribute('onclick', 'togglePasswordVisibilityAlt("studentPassword")');
+      // Set initial SVG
+      studentToggleBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+    }
+    
+    // Add event listener for Enter key to prevent accidental form submission
+    const passwordFields = document.querySelectorAll('input[type="password"], input[type="text"][name="password"]');
+    passwordFields.forEach(field => {
+      field.addEventListener('keydown', function(e) {
+        const toggleButton = this.nextElementSibling;
+        if (e.key === 'Enter' && toggleButton && toggleButton.classList.contains('toggle-password')) {
+          e.preventDefault();
+        }
+      });
+    });
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
